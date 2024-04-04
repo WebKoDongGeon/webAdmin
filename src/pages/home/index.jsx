@@ -3,12 +3,14 @@ import { homeList } from "../api/home";
 
 const Home = () => {
     useEffect(()=>{
-        const resultData = homeList();
+        // const resultData = homeList();
     })
+
+    
     return (
         <>
         <div>
-            ?
+            
         </div>
         </>
     );
