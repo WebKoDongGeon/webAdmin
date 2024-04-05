@@ -1,10 +1,15 @@
 import { Button, Container, Form } from "react-bootstrap";
-import { login } from "../api/login";
+import { login } from "../../api/login";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { user } from "../../store/reducer/userSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [userId, setUserId] = useState();
     const [userPw, setUserPw] = useState();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const loginCheck = async() => {
 
@@ -15,8 +20,34 @@ const Login = () => {
 
         const resultData = await login(formData);
 
-        if(resultData.status === 200) {
+        console.log("로그인 : ",resultData.data.split("&"));
+
+        const data = resultData.data.split("&");
+
+        let resultUsername = '';
+        let resultPermission = '';
+        let resultAccess = '';
+        data.map((e, index)=>{
+            console.log(e);
+            console.log(index);
+            if(index === 0) {
+                resultAccess = e;
+            } else if(index === 1) {
+                resultUsername = e;
+            } else {
+                resultPermission = e;
+            }
             
+        })
+
+        if(resultData.status === 200) {
+            dispatch(user({
+                userName: resultUsername
+                , permission: resultPermission
+                , accessToken: resultAccess
+            }))
+
+            navigate("/");
         }
     }
 
@@ -29,13 +60,13 @@ const Login = () => {
                 <Form.Control 
                     type="text" 
                     placeholder="아이디" 
-                    value={userId}
+                    value={userId || ""}
                     onChange={(e) => setUserId(e.target.value)}
                 />
                 <Form.Control 
                     type="text" 
                     placeholder="비밀번호"
-                    value={userPw}
+                    value={userPw || ""}
                     onChange={(e) => setUserPw(e.target.value)}
                 />
                 <Button

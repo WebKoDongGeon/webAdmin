@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Container, Nav, NavDropdown, Navbar } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 
 const Header = () => {
-    const [user, setUser] = useState();
+    const userName = useSelector((state) => state.user.userName);
 
+    useEffect(()=> {
+        console.log("user : ",userName);
+    })
+
+    
 
     return(
         <>
@@ -17,10 +23,10 @@ const Header = () => {
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                    <Nav.Link href="#home">홈</Nav.Link>
-                    <Nav.Link href="/board">공지사항</Nav.Link>
+                    <Nav.Link href="/">홈</Nav.Link>
+                    <Nav.Link href="/notice">공지사항</Nav.Link>
                     <Nav.Link href="/event">이벤트</Nav.Link>
-                    <Nav.Link href="/memberInfo">회원관리</Nav.Link>
+                    <Nav.Link href="/userInfo">회원관리</Nav.Link>
                     <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                     <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
                     <NavDropdown.Item href="#action/3.2">
@@ -37,12 +43,12 @@ const Header = () => {
             
             </Container>
             <Navbar.Collapse className="justify-content-end" style={{marginRight: '22px'}}>
-                {user && 
+                {userName && 
                     <Navbar.Text>
-                        <Link to="/logout">{user}</Link>
+                        <Link to="/logout">{userName}</Link>
                     </Navbar.Text>
                 }
-                {!user &&
+                {!userName &&
                     <Navbar.Text>
                         <Link to="/join" className='link'>회원가입</Link>
                         &nbsp;&nbsp;

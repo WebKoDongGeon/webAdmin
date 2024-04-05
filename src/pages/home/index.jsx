@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { homeList } from "../api/home";
+
 
 const Home = () => {
     useEffect(()=>{
