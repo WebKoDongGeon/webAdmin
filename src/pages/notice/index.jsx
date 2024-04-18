@@ -3,17 +3,33 @@ import '../notice/index.css';
 import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { current } from "@reduxjs/toolkit";
+import { findNoticeList } from "../../api/notice";
 const Notice = () => {
     const day = dayjs();
-    const [findDate, setFindDate] = useState(Array.from({length: 6}, (_, index) => day.year() - index));
+    const [findDateY, setFindDateY] = useState(Array.from({length: 6}, (_, index) => day.year() - index));
+    const [findDateM, setFindDateM] = useState(Array.from({length: 12}, (_, index) => index + 1));
+    const [findProject, setFindProject] = useState(["전체"]);
+
+
 
     const handleChange = () => {
 
     }
 
+    const dataSet = async() => {
+
+        const resultData = await findNoticeList();
+
+        if(resultData.status === 200){
+            console.log(resultData.data);
+        }
+
+    }
+
 
     useEffect(()=>{
-        console.log(findDate);
+        //초기 데이터 셋팅
+        // dataSet();
     },[])
 
     return (
@@ -43,18 +59,18 @@ const Notice = () => {
                             <th>년,월 지정</th>
                             <th>
                                 <Form.Select aria-label="Default select example" inlist >
-                                    {findDate.map((e)=>{
+                                    {findDateY.map((e)=>{
                                         return (
-                                            <option value={e}>{e}</option>
+                                            <option value={e}>{e}년</option>
                                         )
                                     })}
                                 </Form.Select>
                             </th>
                             <th>
                                 <Form.Select aria-label="Default select example" inlist >
-                                    {findDate.map((e)=>{
+                                    {findDateM.map((e)=>{
                                         return (
-                                            <option value={e}>{e}</option>
+                                            <option value={e}>{e}월</option>
                                         )
                                     })}
                                 </Form.Select>
@@ -63,35 +79,20 @@ const Notice = () => {
                         <tr>
                             <th>작성자 검색</th>
                             <th key={"inline-radio"} colSpan={2}>
-                                <Form.Check 
-                                    type="radio" 
-                                    label="Y" 
-                                    name="group1" 
-                                    inline
-                                />
-                                <Form.Check 
-                                    type="radio"
-                                    label="N" 
-                                    name="group1" 
-                                    inline
-                                />
+                                <Form.Control type="text" placeholder="ex) 김상수" />
                             </th>
                         </tr>
                         <tr>
                             <th>적용 프로젝트 검색</th>
                             <th key={"inline-radio"} colSpan={2}>
-                                <Form.Check 
-                                    type="radio" 
-                                    label="Y" 
-                                    name="group1" 
-                                    inline
-                                />
-                                <Form.Check 
-                                    type="radio"
-                                    label="N" 
-                                    name="group1" 
-                                    inline
-                                />
+                                <Form.Select aria-label="Default select example" inlist >
+                                    {findProject.length > 0 ? findProject.map((e)=>{
+                                        return (
+                                            <option value={e}>{e}</option>
+                                        )
+                                    }) : <option value={""}>프로젝트 없음</option>}
+                                    
+                                </Form.Select>
                             </th>
                         </tr>
                     </thead>
